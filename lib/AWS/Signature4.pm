@@ -240,6 +240,9 @@ sub _scope {
     } elsif ($host =~ /^(\w+)[-.]([\w-]+)\.amazonaws\.com/) {
 	$service  = $1;
 	$region ||= $2;
+    } elsif ($host =~ /^([\w-]+)\.([\w-]+)\.amazonaws\.com/) {
+	$service  = $1;
+	$region ||= $2;
     } elsif ($host =~ /^([\w-]+)\.amazonaws\.com/) {
 	$service = $1;
 	$region  = 'us-east-1';
