@@ -311,6 +311,14 @@ sub _hash_canonical_request {
     $hashed_payload    ||= sha256_hex($request->content);
 
     # canonicalize query string
+
+    # Sometimes parameters aren't passed in the form of k=v but just like ?acl
+    # in the case of the S3 api, but its still expected to be part of a
+    # canonical request.
+    if (scalar(@params) == 0 && defined($uri->query) && $uri->query ne '') {
+        push @params, ($uri->query, '');
+    }
+    
     my %canonical;
     while (my ($key,$value) = splice(@params,0,2)) {
 	$key   = uri_escape($key);
@@ -340,6 +348,7 @@ sub _hash_canonical_request {
 
     my $canonical_request = join("\n",$method,$path,$canonical_query_string,
 				 $canonical_headers,$signed_headers,$hashed_payload);
+
     my $request_digest    = sha256_hex($canonical_request);
     
     return ($request_digest,$signed_headers);
