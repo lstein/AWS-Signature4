@@ -324,10 +324,16 @@ sub _hash_canonical_request {
 
     # canonicalize query string
     my %canonical;
-    while (my ($key,$value) = splice(@params,0,2)) {
-	$key   = uri_escape($key);
-	$value = uri_escape($value);
-	push @{$canonical{$key}},$value;
+    if ($uri->query && ! scalar @params) {
+        # We have the query param without assigned value (i.e. /?acl), so assign an empty value to it
+        $canonical{uri_escape($uri->query)} = [''];
+    }
+    else {
+        while (my ($key,$value) = splice(@params,0,2)) {
+            $key   = uri_escape($key);
+            $value = uri_escape($value);
+            push @{$canonical{$key}},$value;
+        }
     }
     my $canonical_query_string = join '&',map {my $key = $_; map {"$key=$_"} sort @{$canonical{$key}}} sort keys %canonical;
 
