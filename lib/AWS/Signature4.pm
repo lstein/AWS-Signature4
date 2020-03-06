@@ -62,7 +62,7 @@ Arguments:
 
  Argument name       Argument Value
  -------------       --------------
- -access_key         An AWS acccess key (account ID)
+ -access_key         An AWS access key (account ID)
 
  -secret_key         An AWS secret key
 
@@ -73,7 +73,7 @@ If a security token is provided, it overrides any values given for
 -access_key or -secret_key.
 
 If the environment variables EC2_ACCESS_KEY and/or EC2_SECRET_KEY are
-set, their contents are used as defaults for -acccess_key and
+set, their contents are used as defaults for -access_key and
 -secret_key.
 
 =cut
@@ -131,8 +131,6 @@ throw an exception.
 
 This method will generate a signed GET URL for the request. The URL
 will include everything needed to perform the request.
-
-=back
 
 =cut
 
@@ -388,6 +386,8 @@ sub _calculate_signature {
 }
 
 1;
+
+=back
 
 =head1 SEE ALSO
 
