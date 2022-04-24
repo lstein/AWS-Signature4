@@ -253,24 +253,26 @@ sub _scope {
   my $datetime = $self->_datetime($request);
   my ($date)   = $datetime =~ /^(\d+)T/;
   my $service;
-  if ( $host =~ /^([\w.-]+)\.s3\.amazonaws.com/ ) {    # S3 bucket virtual host
+  if ( $host =~ /^([\w-]+)\.s3\.amazonaws.com/ ) {    # S3 bucket virtual host
     $service = 's3';
     $region ||= 'us-east-1';
   }
-  elsif ( $host =~ /^[\w-]+\.s3-([\w-]+)\.amazonaws\.com/ ) {
+  elsif ( $host =~ /^[\w-]+\.s3\.([\w-]+)\.amazonaws\.com/ ) {
     $service = 's3';
     $region ||= $1;
   }
   elsif ( $host =~ /^(\w+)[-.]([\w-]+)\.amazonaws\.com/ ) {
     $service = $1;
-    $region ||= $2;
+    $region  = $2;
   }
   elsif ( $host =~ /^([\w-]+)\.amazonaws\.com/ ) {
     $service = $1;
-    $region  = 'us-east-1';
+    $region ||= 'us-east-1';
   }
+
   $service ||= 's3';
   $region  ||= 'us-east-1';    # default
+
   return "$date/$region/$service/aws4_request";
 } ## end sub _scope
 
